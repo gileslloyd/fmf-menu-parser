@@ -10,6 +10,6 @@ func NewService(parser ImageParser) Service {
 	}
 }
 
-func (s Service) ParseMenuImage(url string) *Menu {
+func (s Service) ParseMenuImage(url string) (*Menu, error) {
 	return s.imageParser.Parse(url)
 }
