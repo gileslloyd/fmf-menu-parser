@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/gileslloyd/menu-parser/pkg/domain/menu"
 	"github.com/gileslloyd/menu-parser/pkg/infrastructure/cloudvision"
 )

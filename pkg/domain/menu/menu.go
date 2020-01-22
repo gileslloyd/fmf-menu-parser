@@ -2,7 +2,7 @@ package menu
 
 type Menu struct {
 	TraderID string
-	Content string
+	Content  string
 }
 
 func NewMenu(traderID string, content string) *Menu {

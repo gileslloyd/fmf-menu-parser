@@ -2,12 +2,12 @@ package cloudvision
 
 import (
 	"context"
-	"github.com/gileslloyd/menu-parser/pkg/domain/menu"
+
 	vision "cloud.google.com/go/vision/apiv1"
+	"github.com/gileslloyd/menu-parser/pkg/domain/menu"
 )
 
 type MlParser struct {
-
 }
 
 func (p MlParser) Parse(url string) (*menu.Menu, error) {
@@ -50,4 +50,3 @@ func detectTextURI(file string) (content string, err error) {
 
 	return menuContent, nil
 }
-
