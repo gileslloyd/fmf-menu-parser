@@ -9,6 +9,7 @@ import (
 	"github.com/gileslloyd/menu-parser/internal/app/controller"
 	"github.com/gileslloyd/menu-parser/internal/domain/menu"
 	"github.com/gileslloyd/menu-parser/pkg/infrastructure/cloudvision"
+	"github.com/gileslloyd/menu-parser/pkg/infrastructure/delivery/rpc"
 )
 
 // Injectors from container.go:
@@ -18,4 +19,11 @@ func CreateMenuController() controller.Menu {
 	service := menu.NewService(imageParser)
 	controllerMenu := controller.NewMenuController(service)
 	return controllerMenu
+}
+
+func CreateMessageListener() rpc.MessageListener {
+	v := GetRoutes()
+	handler := rpc.NewHandler(v)
+	messageListener := rpc.NewMessageListener(handler)
+	return messageListener
 }
