@@ -5,5 +5,5 @@ import (
 )
 
 type Controller interface {
-	Execute(message *infrastructure.Message)
+	Execute(message *infrastructure.Message) (string, error)
 }

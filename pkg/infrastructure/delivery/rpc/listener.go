@@ -1,6 +1,8 @@
 package rpc
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/streadway/amqp"
 )
 
@@ -70,11 +72,38 @@ func (ml MessageListener) Listen() {
 	}
 
 	for msg := range msgs {
-		go ml.processMessage(string(msg.Body))
+		go ml.processMessage(msg)
 		msg.Ack(false)
 	}
 }
 
-func (ml MessageListener) processMessage(message string) {
-	ml.handler.Process(message)
+func (ml MessageListener) processMessage(message amqp.Delivery) {
+	response, err := ml.handler.Process(string(message.Body))
+
+	if err != nil {
+		dat, _ := json.Marshal(map[string]string{ "error": err.Error()})
+		ml.respond(message, string(dat))
+	}
+
+	if response != "" {
+		ml.respond(message, response)
+	}
+}
+
+func  (ml MessageListener) respond(message amqp.Delivery, response string) {
+	err := ml.channel.Publish(
+		"",
+		message.ReplyTo,
+		false,
+		false,
+		amqp.Publishing{
+			ContentType:   "application/json",
+			CorrelationId: message.CorrelationId,
+			Body:          []byte(response),
+		},
+	)
+
+	if err != nil {
+		fmt.Println(err.Error())
+	}
 }

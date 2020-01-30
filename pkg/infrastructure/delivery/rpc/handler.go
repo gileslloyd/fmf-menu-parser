@@ -19,7 +19,7 @@ func NewHandler(routes map[string]base.Controller) *Handler {
 	}
 }
 
-func (h Handler) Process(message string) {
+func (h Handler) Process(message string) (string, error) {
 	var dat map[string]interface{}
 
 	if err := json.Unmarshal([]byte(message), &dat); err != nil {
@@ -28,9 +28,11 @@ func (h Handler) Process(message string) {
 
 	controller, err := h.getRoute(dat)
 
-	if err == nil {
-		controller.Execute(infrastructure.NewMessage(dat["payload"].(map[string]interface{})))
+	if err != nil {
+		return "", err
 	}
+
+	return controller.Execute(infrastructure.NewMessage(dat["payload"].(map[string]interface{})))
 }
 
 func (h Handler) getRoute(payload map[string]interface{}) (base.Controller, error) {
