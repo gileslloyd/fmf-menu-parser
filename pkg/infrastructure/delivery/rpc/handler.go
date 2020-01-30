@@ -2,23 +2,20 @@ package rpc
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
+
+	"github.com/gileslloyd/menu-parser/internal/app/base"
+	"github.com/gileslloyd/menu-parser/pkg/infrastructure"
 )
 
 type Handler struct {
-	routes map[string][2]string
+	routes map[string]base.Controller
 }
 
-func NewHandler() *Handler {
+func NewHandler(routes map[string]base.Controller) *Handler {
 	return &Handler{
-		routes: make(map[string][2]string),
-	}
-}
-
-func (h Handler) Add(route string, controller string, method string) {
-	h.routes[route] = [2]string{
-		controller,
-		method,
+		routes: routes,
 	}
 }
 
@@ -28,5 +25,20 @@ func (h Handler) Process(message string) {
 	if err := json.Unmarshal([]byte(message), &dat); err != nil {
 		panic(err)
 	}
-	fmt.Println(dat)
+
+	controller, err := h.getRoute(dat)
+
+	if err == nil {
+		controller.Execute(infrastructure.NewMessage(dat["payload"].(map[string]interface{})))
+	}
+}
+
+func (h Handler) getRoute(payload map[string]interface{}) (base.Controller, error) {
+	controller := h.routes[fmt.Sprintf("%s.%s", payload["role"].(string), payload["cmd"].(string))]
+
+	if controller != nil {
+		return controller, nil
+	}
+
+	return nil, errors.New("route not prepared")
 }

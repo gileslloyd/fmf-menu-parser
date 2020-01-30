@@ -4,7 +4,7 @@ import (
 	"context"
 
 	vision "cloud.google.com/go/vision/apiv1"
-	"github.com/gileslloyd/menu-parser/pkg/domain/menu"
+	"github.com/gileslloyd/menu-parser/internal/domain/menu"
 )
 
 type MlParser struct {

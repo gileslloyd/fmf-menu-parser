@@ -1,8 +1,6 @@
 package main
 
-import (
-	"github.com/gileslloyd/menu-parser/pkg/infrastructure/delivery/rpc"
-)
+import "github.com/gileslloyd/menu-parser/internal/app"
 
 func main() {
 	//service := menu.NewService(cloudvision.MlParser{})
@@ -16,7 +14,6 @@ func main() {
 	//	fmt.Print("Error: " + err.Error())
 	//}
 
-	messageListener := rpc.NewMessageListener(rpc.NewHandler())
-
-	messageListener.Listen()
+	a := app.NewApp()
+	a.Run()
 }
