@@ -10,6 +10,10 @@ import (
 type MlParser struct {
 }
 
+func NewMLParser() menu.ImageParser {
+	return MlParser{}
+}
+
 func (p MlParser) Parse(url string) (*menu.Menu, error) {
 	menuContent, err := detectTextURI(url)
 

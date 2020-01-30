@@ -4,16 +4,15 @@ import (
 	"encoding/json"
 	"github.com/gileslloyd/menu-parser/internal/domain/menu"
 	"github.com/gileslloyd/menu-parser/pkg/infrastructure"
-	"github.com/gileslloyd/menu-parser/pkg/infrastructure/cloudvision"
 )
 
 type Menu struct {
 	service menu.Service
 }
 
-func NewMenuController() Menu {
+func NewMenuController(service menu.Service) Menu {
 	return Menu{
-		service: menu.NewService(cloudvision.MlParser{}),
+		service: service,
 	}
 }
 
